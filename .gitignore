@@ -1,0 +1,25 @@
+# Gradle / build outputs
+.gradle
+/build
+/captures
+.externalNativeBuild
+.cxx
+.kotlin/
+*.hprof
+
+# Local config / signing secrets
+local.properties
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+
+# IDE
+*.iml
+.idea/
+.DS_Store
+
+# Logs / scratch files
+hs_err_pid*.log
+replay_pid*.log
+out.txt
