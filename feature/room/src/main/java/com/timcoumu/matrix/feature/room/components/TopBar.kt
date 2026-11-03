@@ -34,11 +34,9 @@ fun TopBar(
             Spacer(modifier = Modifier.width(16.dp))
             Text(
                 name,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.SemiBold
+                fontSize = 20.sp
             )
         }
-
         content()
     }
 }

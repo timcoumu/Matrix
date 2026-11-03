@@ -13,14 +13,15 @@ import com.timcoumu.matrix.feature.chat.ui.ChatScreen
 @Composable
 fun ChatRoute(
     roomId: String,
-    onBack:()->Unit
+    onBack:()->Unit,
+    onOpenRoomManager:(roomId: String)-> Unit
 ){
     val TAG = "ChatRoute"
     val chatViewModel = hiltViewModel<ChatViewModel>()
     val chatUiState by chatViewModel.chatUiState.collectAsStateWithLifecycle()
     LaunchedEffect(roomId) {
         Log.d(TAG, "ChatRoute: 进入房间：${roomId}")
-        chatViewModel.registerTimeline(roomId)
+        chatViewModel.initChatViewModel(roomId)
     }
     ChatScreen(
         onBack = onBack,
@@ -28,5 +29,6 @@ fun ChatRoute(
         onSend = { chatViewModel.onSend(roomId) },
         onChangeSendMessage = chatViewModel::onChangeSendMessage,
         chatScopeCall = { chatViewModel.chatScopeCall(it) },
+        onOpenRoomManager = onOpenRoomManager,
     )
 }

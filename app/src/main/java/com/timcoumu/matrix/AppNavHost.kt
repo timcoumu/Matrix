@@ -21,6 +21,7 @@ import com.timcoumu.matrix.feature.main.navigation.HomeDestination
 import com.timcoumu.matrix.feature.main.navigation.mainScreen
 import com.timcoumu.matrix.feature.room.navigation.CreateDestination
 import com.timcoumu.matrix.feature.room.navigation.RoomInSpaceDestination
+import com.timcoumu.matrix.feature.room.navigation.RoomManagerDestination
 import com.timcoumu.matrix.feature.room.navigation.createScreen
 import com.timcoumu.matrix.ui.MainBottomBar
 import kotlinx.coroutines.CoroutineScope
@@ -124,6 +125,9 @@ fun AppNavHost(
             chatScreen(
                 onBack = {
                     navController.popBackStack()
+                },
+                onOpenRoomManager = {
+                    navController.navigate(RoomManagerDestination(it))
                 }
             )
             createScreen(

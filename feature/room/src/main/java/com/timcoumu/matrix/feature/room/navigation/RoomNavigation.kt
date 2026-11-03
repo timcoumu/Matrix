@@ -6,6 +6,7 @@ import androidx.navigation.toRoute
 import com.timcoumu.core.matrix.model.RoomType
 import com.timcoumu.matrix.feature.room.route.CreateRoomRoute
 import com.timcoumu.matrix.feature.room.route.RoomInSpaceRoute
+import com.timcoumu.matrix.feature.room.route.RoomManagerRoute
 import kotlinx.serialization.Serializable
 
 
@@ -24,8 +25,10 @@ data class CreateDestination(
 data class RoomInSpaceDestination(
     val spaceId: String
 )
-
-
+@Serializable
+data class RoomManagerDestination(
+    val roomId: String
+)
 fun NavGraphBuilder.createScreen(
     onBack:()-> Unit,
     showMessage:(String)-> Unit,
@@ -53,6 +56,13 @@ fun NavGraphBuilder.createScreen(
             onOpenChat = onOpenChat,
             onLongClick = onLongClick,
             spaceId=roomInSpaceDestination.spaceId
+        )
+    }
+    composable<RoomManagerDestination> {
+        val roomManagerDestination = it.toRoute<RoomManagerDestination>()
+        RoomManagerRoute(
+            roomId = roomManagerDestination.roomId,
+            onBack = onBack
         )
     }
 }

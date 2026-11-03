@@ -7,10 +7,12 @@ import com.timcoumu.core.matrix.Matrix.client
 import com.timcoumu.core.matrix.MatrixService.syncScope
 import com.timcoumu.core.matrix.MatrixService.syncService
 import com.timcoumu.core.matrix.model.MessageState
+import com.timcoumu.core.matrix.model.MyRoomMemberState
 import com.timcoumu.core.matrix.model.MyRoomPreset
 import com.timcoumu.core.matrix.model.RoomState
 import com.timcoumu.core.matrix.model.RoomType
 import com.timcoumu.core.matrix.model.RoomtoRoomState
+import com.timcoumu.core.matrix.model.toMyRoomMemberState
 import com.timcoumu.core.matrix.model.toRoomPreset
 import com.timcoumu.core.matrix.model.toRoomState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +26,8 @@ import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
 import org.matrix.rustcomponents.sdk.RoomListEntriesListener
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListEntriesWithDynamicAdaptersResult
+import org.matrix.rustcomponents.sdk.RoomMember
+import org.matrix.rustcomponents.sdk.RoomMembersIterator
 import org.matrix.rustcomponents.sdk.RoomVisibility
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.TimelineDiff
@@ -34,11 +38,12 @@ import org.matrix.rustcomponents.sdk.TimelineListener
 object MatrixRoomService {
     private val TAG = "MatrixRoomService"
     val roomsFlow = MutableStateFlow<List<RoomState>>(emptyList())
+    val roomMembersFlow = MutableStateFlow<List<MyRoomMemberState>>(emptyList())
     var timelineListener: TaskHandle? = null
-    val currentRoom: Room? = null
-    var roomListAdapter: RoomListEntriesWithDynamicAdaptersResult?=null
+    var currentRoom: Room? = null
+    var roomListAdapter: RoomListEntriesWithDynamicAdaptersResult? = null
     val messageFlowTemp = MutableStateFlow<List<MessageState>>(emptyList())
-    internal suspend fun createRoomService(){
+    internal suspend fun createRoomService() {
         val roomListService = syncService.roomListService()
         val allRooms = roomListService?.allRooms()
         roomListAdapter = allRooms?.entriesWithDynamicAdapters(
@@ -71,6 +76,7 @@ object MatrixRoomService {
         controller?.addOnePage()
 
     }
+
     private fun handleRoomListUpdates(updates: List<RoomListEntriesUpdate>) {
         updates.forEach { update ->
             when (update) {
@@ -180,11 +186,13 @@ object MatrixRoomService {
             }
         }
     }
+
     suspend fun registerTimelineForOneRoom(roomId: String) {
         val room = client.getRoom(roomId)
         if (currentRoom != room) timelineListener = null
+        currentRoom = room
         val timeLine = room?.timeline()
-        timelineListener?:let {
+        timelineListener ?: let {
             timelineListener = timeLine?.addListener(
                 object : TimelineListener {
                     override fun onUpdate(diff: List<TimelineDiff>) {
@@ -291,6 +299,7 @@ object MatrixRoomService {
         }
 
     }
+
     private fun parseTimelineItem(item: TimelineItem): MessageState? {
         val event = item.asEvent() ?: return null
         val timelineContent = event.content
@@ -390,7 +399,8 @@ object MatrixRoomService {
             }
         }
     }
-    suspend fun sendMessage(roomId: String,message: String){
+
+    suspend fun sendMessage(roomId: String, message: String) {
         val room = client.getRoom(roomId)
         val jsonMessage = com.timcoumu.core.matrix.json.MessageContent(
             msgtype = "m.text",
@@ -404,21 +414,33 @@ object MatrixRoomService {
         )
 //        registerTimelineForOneRoom(roomId)
     }
+
     suspend fun createRoomOrSpace(
         name: String,
         topic: String,
         type: RoomType,
         preset: MyRoomPreset
-    ){
+    ) {
         val parameters = CreateRoomParameters(
-            avatar= null,
+            avatar = null,
             name = name,
             topic = topic,
-            isSpace = type== RoomType.SPACE,
+            isSpace = type == RoomType.SPACE,
             isEncrypted = true,
             visibility = RoomVisibility.Private,
             preset = preset.toRoomPreset()
         )
         client.createRoom(parameters)
+    }
+
+    fun getRoomState(): RoomState? {
+
+        return currentRoom?.toRoomState()
+    }
+    suspend fun getRoomMembers(){
+        val iterator: RoomMembersIterator? =  currentRoom?.members()
+        val roomMembers:List<RoomMember> = iterator?.nextChunk(100U)?:emptyList()
+        roomMembersFlow.value = roomMembers.map { it.toMyRoomMemberState() }
+        iterator?.close()
     }
 }

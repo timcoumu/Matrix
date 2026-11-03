@@ -1,11 +1,9 @@
 package com.timcoumu.matrix.feature.chat.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.timcoumu.core.matrix.Matrix
 import com.timcoumu.core.matrix.MatrixRoomService
-import com.timcoumu.core.matrix.MatrixService
 import com.timcoumu.core.matrix.model.UserState
 import com.timcoumu.matrix.feature.chat.state.ChatUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,16 +17,19 @@ import javax.inject.Inject
 @HiltViewModel
 class ChatViewModel @Inject constructor(): ViewModel() {
     private val TAG = "ChatViewModel"
+    private val _roomId = MutableStateFlow<String>("")
     private val _sendMessage = MutableStateFlow("")
     val chatUiState = combine(
         MatrixRoomService.messageFlowTemp,
         _sendMessage,
-        Matrix.userState
-    ){messageTemp,sendMessage,userState->
+        Matrix.userState,
+                _roomId
+    ){messageTemp,sendMessage,userState,roomId->
         ChatUiState(
             messages = messageTemp,
             sendMessage = sendMessage,
             userState = userState,
+            roomId = roomId,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -41,11 +42,13 @@ class ChatViewModel @Inject constructor(): ViewModel() {
                 userId = "",
                 displayName = "",
                 avatarUrl = ""
-            )
+            ),
+            roomId = ""
         )
     )
-    fun registerTimeline(roomId: String){
+    fun initChatViewModel(roomId: String){
         viewModelScope.launch {
+            _roomId.value = roomId
             MatrixRoomService.registerTimelineForOneRoom(roomId)
         }
     }

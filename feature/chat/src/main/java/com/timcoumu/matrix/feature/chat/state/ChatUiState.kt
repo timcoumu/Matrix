@@ -6,5 +6,6 @@ import com.timcoumu.core.matrix.model.UserState
 data class ChatUiState(
     val messages: List<MessageState>,
     val sendMessage: String,
-    val userState: UserState
+    val userState: UserState,
+    val roomId: String
 )

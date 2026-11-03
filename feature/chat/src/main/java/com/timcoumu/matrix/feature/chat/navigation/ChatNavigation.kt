@@ -12,13 +12,15 @@ data class ChatDestination(
 )
 
 fun NavGraphBuilder.chatScreen(
-    onBack:()-> Unit
+    onBack:()-> Unit,
+    onOpenRoomManager:(roomId: String)-> Unit
 ){
     composable<ChatDestination> {
         val chatDestination = it.toRoute<ChatDestination>()
         ChatRoute(
             onBack = onBack,
-            roomId = chatDestination.roomId
+            roomId = chatDestination.roomId,
+            onOpenRoomManager = onOpenRoomManager
         )
     }
 }

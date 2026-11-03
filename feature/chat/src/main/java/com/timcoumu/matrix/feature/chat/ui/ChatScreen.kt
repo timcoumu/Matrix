@@ -1,5 +1,6 @@
 package com.timcoumu.matrix.feature.chat.ui
 
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +11,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,6 +34,7 @@ fun ChatScreen(
     chatUiState: ChatUiState,
     onChangeSendMessage: (message: String) -> Unit,
     chatScopeCall: (function: suspend () -> Unit) -> Unit,
+    onOpenRoomManager:(roomId: String)-> Unit,
     onSend: () -> Unit,
     onBack: () -> Unit
 ) {
@@ -50,6 +55,14 @@ fun ChatScreen(
         TopBar(
             name = "聊天房间",
             onBack = onBack,
+            content = {
+                Icon(Icons.Default.Menu,"", modifier = Modifier.combinedClickable(
+                    onClick = {
+                        onOpenRoomManager(chatUiState.roomId)
+                    }
+
+                ))
+            }
         )
         LazyColumn(
             state = listState,
@@ -123,10 +136,12 @@ fun PreviewChatScreen() {
                 userId = "张三",
                 displayName = "",
                 avatarUrl = ""
-            )
+            ),
+            roomId = ""
         ),
         onSend = {},
         onChangeSendMessage = {},
-        chatScopeCall = {}
+        chatScopeCall = {},
+        onOpenRoomManager = {}
     )
 }
