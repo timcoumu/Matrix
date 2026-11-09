@@ -5,6 +5,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.timcoumu.core.matrix.model.RoomType
 import com.timcoumu.matrix.feature.room.route.CreateRoomRoute
+import com.timcoumu.matrix.feature.room.route.InviteBoxRoute
+import com.timcoumu.matrix.feature.room.route.InviteRoute
 import com.timcoumu.matrix.feature.room.route.RoomInSpaceRoute
 import com.timcoumu.matrix.feature.room.route.RoomManagerRoute
 import kotlinx.serialization.Serializable
@@ -29,11 +31,19 @@ data class RoomInSpaceDestination(
 data class RoomManagerDestination(
     val roomId: String
 )
+@Serializable
+data class InviteDestination(
+    val roomId: String?
+)
+@Serializable
+object InviteBoxDestination
 fun NavGraphBuilder.createScreen(
     onBack:()-> Unit,
     showMessage:(String)-> Unit,
     onLongClick:()-> Unit,
-    onOpenChat:(String)-> Unit
+    onOpenChat:(String)-> Unit,
+    onOpenHome:()->Unit,
+    onOpenInvite:(roomId: String?)-> Unit
 ){
     composable<CreateDestination>{
         val createDestination = it.toRoute<CreateDestination>()
@@ -62,7 +72,24 @@ fun NavGraphBuilder.createScreen(
         val roomManagerDestination = it.toRoute<RoomManagerDestination>()
         RoomManagerRoute(
             roomId = roomManagerDestination.roomId,
-            onBack = onBack
+            onBack = onBack,
+            showMessage = showMessage,
+            onOpenHome = onOpenHome,
+            onOpenInvite = onOpenInvite
+        )
+    }
+    composable<InviteDestination> {
+        val inviteDestination = it.toRoute<InviteDestination>()
+        InviteRoute(
+            onBack = onBack,
+            roomId = inviteDestination.roomId,
+            showMessage = showMessage
+        )
+    }
+    composable<InviteBoxDestination> {
+        InviteBoxRoute(
+            onBack = onBack,
+            showMessage = showMessage
         )
     }
 }

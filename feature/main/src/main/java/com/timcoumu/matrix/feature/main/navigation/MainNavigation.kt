@@ -23,6 +23,7 @@ object SettingDestination
 @Serializable
 object MeDestination
 fun NavGraphBuilder.mainScreen(
+    onOpenInviteBox:()-> Unit,
     onBack:()->Unit,
     onOpenLogin:()-> Unit,
     onOpenRegister:()-> Unit,
@@ -54,6 +55,7 @@ fun NavGraphBuilder.mainScreen(
     composable<SettingDestination> {
         SettingRoute(
             onBack = onBack,
+            onOpenInviteBox = onOpenInviteBox,
 //            onOpenHome = onOpenHome,
 //            onOpenSpace = onOpenSpace,
 //            onOpenMe = onOpenMe

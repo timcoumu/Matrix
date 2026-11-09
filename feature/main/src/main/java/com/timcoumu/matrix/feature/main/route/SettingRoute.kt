@@ -6,9 +6,12 @@ import com.timcoumu.matrix.feature.main.ui.SettingScreen
 @Composable
 fun SettingRoute(
     onBack:()-> Unit,
+    onOpenInviteBox:()-> Unit
 //    onOpenHome:()->Unit,
 //    onOpenSpace:()->Unit,
 //    onOpenMe:()->Unit,
 ){
-    SettingScreen()
+    SettingScreen(
+        onOpenInviteBox = onOpenInviteBox
+    )
 }

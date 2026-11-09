@@ -38,10 +38,12 @@ import org.matrix.rustcomponents.sdk.TimelineListener
 object MatrixRoomService {
     private val TAG = "MatrixRoomService"
     val roomsFlow = MutableStateFlow<List<RoomState>>(emptyList())
+    val inviteRoomsFlow = MutableStateFlow<List<RoomState>>(emptyList())
     val roomMembersFlow = MutableStateFlow<List<MyRoomMemberState>>(emptyList())
     var timelineListener: TaskHandle? = null
     var currentRoom: Room? = null
     var roomListAdapter: RoomListEntriesWithDynamicAdaptersResult? = null
+    var inviteRoomListAdapter: RoomListEntriesWithDynamicAdaptersResult? = null
     val messageFlowTemp = MutableStateFlow<List<MessageState>>(emptyList())
     internal suspend fun createRoomService() {
         val roomListService = syncService.roomListService()
@@ -63,20 +65,38 @@ object MatrixRoomService {
                 }
             }
         )
+        inviteRoomListAdapter = allRooms?.entriesWithDynamicAdapters(
+            pageSize = 200u,
+            listener = object : RoomListEntriesListener {
+                override fun onUpdate(
+                    roomEntriesUpdate: List<RoomListEntriesUpdate>
+                ) {
+                    syncScope.launch {
+                        handleInviteRoomListUpdates(roomEntriesUpdate)
+                    }
+                }
+            }
+        )
         val controller = roomListAdapter?.controller()
-        // 在这里设置适合当前 SDK 版本的 filter。
+        val inviteController = inviteRoomListAdapter?.controller()
         controller?.setFilter(
             RoomListEntriesDynamicFilterKind.All(
                 listOf(
                     RoomListEntriesDynamicFilterKind.Joined,
-                    RoomListEntriesDynamicFilterKind.NonSpace
+                    RoomListEntriesDynamicFilterKind.NonSpace,
+                )
+            )
+        )
+        inviteController?.setFilter(
+            RoomListEntriesDynamicFilterKind.All(
+                listOf(
+                    RoomListEntriesDynamicFilterKind.Invite
                 )
             )
         )
         controller?.addOnePage()
-
+        inviteController?.addOnePage()
     }
-
     private fun handleRoomListUpdates(updates: List<RoomListEntriesUpdate>) {
         updates.forEach { update ->
             when (update) {
@@ -186,7 +206,84 @@ object MatrixRoomService {
             }
         }
     }
-
+    private fun handleInviteRoomListUpdates(updates: List<RoomListEntriesUpdate>) {
+        updates.forEach { update ->
+            when (update) {
+                is RoomListEntriesUpdate.Append -> {
+                    inviteRoomsFlow.update { current ->
+                        current + update.values.map { it.toRoomState() }
+                    }
+                }
+                is RoomListEntriesUpdate.PushBack -> {
+                    inviteRoomsFlow.update { current ->
+                        current + RoomtoRoomState(update.value)
+                    }
+                }
+                is RoomListEntriesUpdate.PushFront -> {
+                    inviteRoomsFlow.update { current ->
+                        listOf(RoomtoRoomState(update.value)) + current
+                    }
+                }
+                is RoomListEntriesUpdate.Insert -> {
+                    inviteRoomsFlow.update { current ->
+                        current.toMutableList().apply {
+                            val index = update.index.toInt()
+                            if (index in 0..size) {
+                                add(index, RoomtoRoomState(update.value))
+                            } else {
+                                Log.w(TAG, "Insert index out of bounds: $index")
+                            }
+                        }
+                    }
+                }
+                is RoomListEntriesUpdate.Set -> {
+                    inviteRoomsFlow.update { current ->
+                        current.toMutableList().apply {
+                            val index = update.index.toInt()
+                            if (index in indices) {
+                                this[index] = RoomtoRoomState(update.value)
+                            } else {
+                                Log.w(TAG, "Set index out of bounds: $index")
+                            }
+                        }
+                    }
+                }
+                is RoomListEntriesUpdate.Remove -> {
+                    inviteRoomsFlow.update { current ->
+                        current.toMutableList().apply {
+                            val index = update.index.toInt()
+                            if (index in indices) {
+                                removeAt(index)
+                            } else {
+                                Log.w(TAG, "Remove index out of bounds: $index")
+                            }
+                        }
+                    }
+                }
+                is RoomListEntriesUpdate.PopFront -> {
+                    inviteRoomsFlow.update { current ->
+                        if (current.isNotEmpty()) current.drop(1) else current
+                    }
+                }
+                is RoomListEntriesUpdate.PopBack -> {
+                    inviteRoomsFlow.update { current ->
+                        if (current.isNotEmpty()) current.dropLast(1) else current
+                    }
+                }
+                is RoomListEntriesUpdate.Clear -> {
+                    inviteRoomsFlow.value = emptyList()
+                }
+                is RoomListEntriesUpdate.Truncate -> {
+                    inviteRoomsFlow.update { current ->
+                        current.take(update.length.toInt().coerceAtLeast(0))
+                    }
+                }
+                is RoomListEntriesUpdate.Reset -> {
+                    inviteRoomsFlow.value = update.values.map { it.toRoomState() }
+                }
+            }
+        }
+    }
     suspend fun registerTimelineForOneRoom(roomId: String) {
         val room = client.getRoom(roomId)
         if (currentRoom != room) timelineListener = null
@@ -297,9 +394,7 @@ object MatrixRoomService {
                 }
             )
         }
-
     }
-
     private fun parseTimelineItem(item: TimelineItem): MessageState? {
         val event = item.asEvent() ?: return null
         val timelineContent = event.content
@@ -434,7 +529,6 @@ object MatrixRoomService {
     }
 
     fun getRoomState(): RoomState? {
-
         return currentRoom?.toRoomState()
     }
     suspend fun getRoomMembers(){
@@ -442,5 +536,26 @@ object MatrixRoomService {
         val roomMembers:List<RoomMember> = iterator?.nextChunk(100U)?:emptyList()
         roomMembersFlow.value = roomMembers.map { it.toMyRoomMemberState() }
         iterator?.close()
+    }
+    suspend fun leaveRoom(){
+        currentRoom?.leave()
+    }
+    suspend fun setRoomName(name: String){
+        currentRoom?.setName(name)
+    }
+    suspend fun setRoomTopic(topic: String){
+        currentRoom?.setTopic(topic)
+    }
+    suspend fun inviteUser(roomId: String,userId: String){
+        val room = client.getRoom(roomId)
+        room?.inviteUserById(userId)
+    }
+    suspend fun acceptInvite(roomId:String){
+        val room = client.getRoom(roomId)
+        room?.join()
+    }
+    suspend fun rejectInvite(roomId:String){
+        val room = client.getRoom(roomId)
+        room?.leave()
     }
 }

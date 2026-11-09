@@ -20,6 +20,8 @@ import com.timcoumu.matrix.feature.chat.navigation.chatScreen
 import com.timcoumu.matrix.feature.main.navigation.HomeDestination
 import com.timcoumu.matrix.feature.main.navigation.mainScreen
 import com.timcoumu.matrix.feature.room.navigation.CreateDestination
+import com.timcoumu.matrix.feature.room.navigation.InviteBoxDestination
+import com.timcoumu.matrix.feature.room.navigation.InviteDestination
 import com.timcoumu.matrix.feature.room.navigation.RoomInSpaceDestination
 import com.timcoumu.matrix.feature.room.navigation.RoomManagerDestination
 import com.timcoumu.matrix.feature.room.navigation.createScreen
@@ -88,8 +90,7 @@ fun AppNavHost(
                         )
                     )
                 },
-                onOpenEditor = {
-                    spaceId, spaceName, spaceAvatar, spaceTopic, spaceJoinRule, type ->
+                onOpenEditor = { spaceId, spaceName, spaceAvatar, spaceTopic, spaceJoinRule, type ->
                     navController.navigate(
                         CreateDestination(
                             type = type,
@@ -101,6 +102,9 @@ fun AppNavHost(
                             spaceJoinRule = spaceJoinRule
                         )
                     )
+                },
+                onOpenInviteBox = {
+                    navController.navigate(InviteBoxDestination)
                 }
             )
             authScreen(
@@ -143,6 +147,18 @@ fun AppNavHost(
                 onOpenChat = {
                     navController.navigate(
                         ChatDestination(
+                            roomId = it
+                        )
+                    )
+                },
+                onOpenHome = {
+                    navController.navigate(HomeDestination) {
+                        popUpTo(RegisterDestination) { inclusive = true }
+                    }
+                },
+                onOpenInvite = {
+                    navController.navigate(
+                        InviteDestination(
                             roomId = it
                         )
                     )

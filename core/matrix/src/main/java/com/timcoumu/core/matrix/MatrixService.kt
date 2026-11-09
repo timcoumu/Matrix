@@ -5,7 +5,9 @@ import com.google.gson.Gson
 import com.timcoumu.core.matrix.Matrix.client
 import com.timcoumu.core.matrix.model.MyRoomPreset
 import com.timcoumu.core.matrix.model.RoomType
+import com.timcoumu.core.matrix.model.UserState
 import com.timcoumu.core.matrix.model.toRoomPreset
+import com.timcoumu.core.matrix.model.toUserState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,6 +48,12 @@ object MatrixService {
                 Log.e(TAG, "createRoomServices error", e)
             }
         }
-
-
+    suspend fun searchUser(username: String): List<UserState>{
+        return client.searchUsers(
+            searchTerm = username,
+            limit = 10U
+        ).results.map {
+            it.toUserState()
+        }
+    }
 }

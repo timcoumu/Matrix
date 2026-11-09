@@ -5,22 +5,44 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.timcoumu.matrix.feature.room.effect.RoomManageEffect
 import com.timcoumu.matrix.feature.room.presentation.RoomManagerViewModel
 import com.timcoumu.matrix.feature.room.ui.RoomManagerScreen
 
 @Composable
 fun RoomManagerRoute(
     roomId: String,
-    onBack:()-> Unit
+    onOpenHome:()->Unit,
+    showMessage:(msg: String)->Unit,
+    onBack:()-> Unit,
+    onOpenInvite:(roomId: String?)-> Unit
 ){
     val roomManagerViewModel = hiltViewModel<RoomManagerViewModel>()
     val roomUiState by roomManagerViewModel.roomManageUiState.collectAsStateWithLifecycle()
     LaunchedEffect(roomId) {
         roomManagerViewModel.initViewModel()
     }
+    LaunchedEffect(Unit) {
+        roomManagerViewModel.roomManagerEffect.collect {
+            when(it){
+                is RoomManageEffect.LeaveRoom -> {
+                    showMessage(it.message)
+                    if (it.result){
+                        onOpenHome()
+                    }else{
+
+                    }
+                }
+            }
+        }
+    }
     RoomManagerScreen(
         roomManagerUiState = roomUiState,
         onBack = onBack,
-        onLeaveRoom = {}
+        onLeaveRoom = roomManagerViewModel::leaveRoom,
+        onClickMemberList = {},
+        onClickRoomName = roomManagerViewModel::setRoomName,
+        onClickRoomTopic = roomManagerViewModel::setRoomTopic,
+        onClickInvite = { onOpenInvite(roomUiState.room?.id) }
     )
 }
