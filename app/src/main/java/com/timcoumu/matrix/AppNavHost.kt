@@ -146,6 +146,11 @@ fun AppNavHost(
                             roomId = it
                         )
                     )
+                },
+                onOpenHome = {
+                    navController.navigate(HomeDestination) {
+                        popUpTo(RegisterDestination) { inclusive = true }
+                    }
                 }
             )
         }

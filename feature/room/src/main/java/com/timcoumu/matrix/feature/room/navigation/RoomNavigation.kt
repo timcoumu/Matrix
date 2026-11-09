@@ -33,7 +33,8 @@ fun NavGraphBuilder.createScreen(
     onBack:()-> Unit,
     showMessage:(String)-> Unit,
     onLongClick:()-> Unit,
-    onOpenChat:(String)-> Unit
+    onOpenChat:(String)-> Unit,
+    onOpenHome:()->Unit
 ){
     composable<CreateDestination>{
         val createDestination = it.toRoute<CreateDestination>()
@@ -62,7 +63,9 @@ fun NavGraphBuilder.createScreen(
         val roomManagerDestination = it.toRoute<RoomManagerDestination>()
         RoomManagerRoute(
             roomId = roomManagerDestination.roomId,
-            onBack = onBack
+            onBack = onBack,
+            showMessage = showMessage,
+            onOpenHome = onOpenHome
         )
     }
 }

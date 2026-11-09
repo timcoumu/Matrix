@@ -20,12 +20,13 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CardContainer(
+    modifier: Modifier = Modifier,
     title: String,
     titleDesc: String = "",
     content: @Composable () -> Unit = {}
 ) {
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp)),
         color = MaterialTheme.colorScheme.surfaceContainerLowest

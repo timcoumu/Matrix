@@ -22,14 +22,13 @@ fun TopBar(
     name: String,
     content:@Composable ()-> Unit = {}
 ) {
-    Row(modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+    Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp).fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
         ) {
         Text(
             name,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.SemiBold
+            fontSize = 20.sp,
         )
         content()
     }

@@ -434,7 +434,6 @@ object MatrixRoomService {
     }
 
     fun getRoomState(): RoomState? {
-
         return currentRoom?.toRoomState()
     }
     suspend fun getRoomMembers(){
@@ -442,5 +441,14 @@ object MatrixRoomService {
         val roomMembers:List<RoomMember> = iterator?.nextChunk(100U)?:emptyList()
         roomMembersFlow.value = roomMembers.map { it.toMyRoomMemberState() }
         iterator?.close()
+    }
+    suspend fun leaveRoom(){
+        currentRoom?.leave()
+    }
+    suspend fun setRoomName(name: String){
+        currentRoom?.setName(name)
+    }
+    suspend fun setRoomTopic(topic: String){
+        currentRoom?.setTopic(topic)
     }
 }
