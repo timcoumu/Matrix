@@ -54,12 +54,7 @@ fun ConversationRow(
                 .background(MaterialTheme.colorScheme.primaryContainer),
             contentAlignment = Alignment.Center,
         ) {
-            AsyncImage(
-                modifier = Modifier.size(26.dp),
-                model = avatarUrl,
-                contentDescription = "",
-                error = rememberVectorPainter(Icons.Default.Person)
-            )
+            Text(text = displayName.get(0).toString(), fontWeight = FontWeight.SemiBold)
         }
 
         Spacer(Modifier.width(12.dp))

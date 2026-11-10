@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.timcoumu.core.matrix.model.RoomState
+import com.timcoumu.matrix.feature.room.components.MatrixBitmapLoader
 import com.timcoumu.matrix.feature.room.components.TopBar
 import com.timcoumu.matrix.feature.room.state.InviteBoxUiState
 
@@ -51,7 +52,7 @@ fun InviteBoxScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         TopBar(
-            name = "邀请箱",
+            name = "邀请",
             onBack = onBack
         )
         if (inviteBoxUiState.inviteList.isEmpty()) {
@@ -112,11 +113,9 @@ private fun InviteBoxItem(
                         .background(MaterialTheme.colorScheme.primaryContainer),
                     contentAlignment = Alignment.Center
                 ) {
-                    AsyncImage(
-                        modifier = Modifier.size(26.dp),
-                        model = room.avatarUrl,
-                        contentDescription = "",
-                        error = rememberVectorPainter(Icons.Default.Person)
+                    MatrixBitmapLoader(
+                        url = room.avatarUrl?:"",
+                        errorSize = 26.dp
                     )
                 }
                 Spacer(Modifier.width(12.dp))

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -54,12 +55,7 @@ internal fun ProfileHeader(
                 .background(MaterialTheme.colorScheme.primaryContainer),
             contentAlignment = Alignment.Center,
         ) {
-            AsyncImage(
-                model = avatarUrl,
-                contentDescription = "",
-                error = rememberVectorPainter(Icons.Default.Person)
-            )
-
+            MatrixBitmapLoader(url = avatarUrl?:"", errorSize = 40.dp)
         }
 
         Spacer(Modifier.width(16.dp))

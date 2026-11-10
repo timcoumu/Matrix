@@ -28,8 +28,8 @@ class LoginViewModel @Inject constructor(
     private val repository: RepositoryImpl
 ) : AndroidViewModel(application) {
     private val TAG = "LoginViewModel"
-    private val _username = MutableStateFlow("")
-    private val _password = MutableStateFlow("")
+    private val _username = MutableStateFlow("tom")
+    private val _password = MutableStateFlow("tom123456789")
     private val _deviceId = Settings.Secure.getString(
         application.contentResolver,
         Settings.Secure.ANDROID_ID

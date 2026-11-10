@@ -45,6 +45,7 @@ import com.timcoumu.core.matrix.model.MyRoomMemberState
 import com.timcoumu.core.matrix.model.RoomState
 import com.timcoumu.matrix.feature.room.components.CardContainer
 import com.timcoumu.matrix.feature.room.components.LeaveRoomButton
+import com.timcoumu.matrix.feature.room.components.MatrixBitmapLoader
 import com.timcoumu.matrix.feature.room.components.TopBar
 import com.timcoumu.matrix.feature.room.state.RoomManagerUiState
 
@@ -88,12 +89,9 @@ fun RoomManagerScreen(
                     .background(MaterialTheme.colorScheme.primaryContainer),
                 contentAlignment = Alignment.Center
             ) {
-                AsyncImage(
-                    modifier = Modifier.size(50.dp),
-                    model = "",
-                    error = rememberVectorPainter(Icons.Default.Person),
-                    contentDescription = "",
-                    contentScale = ContentScale.Crop
+                MatrixBitmapLoader(
+                    url = roomManagerUiState.room?.avatarUrl?:"",
+                    errorSize = 50.dp
                 )
             }
             Column(modifier = Modifier.weight(1f)) {
@@ -136,12 +134,9 @@ fun RoomManagerScreen(
                                 .background(MaterialTheme.colorScheme.primaryContainer),
                             contentAlignment = Alignment.Center
                         ) {
-                            AsyncImage(
-                                modifier = Modifier.size(30.dp),
-                                model = "",
-                                error = rememberVectorPainter(Icons.Default.Person),
-                                contentDescription = "",
-                                contentScale = ContentScale.Crop
+                            MatrixBitmapLoader(
+                                url = it.avatarUrl,
+                                errorSize = 30.dp
                             )
                         }
                         Text(
