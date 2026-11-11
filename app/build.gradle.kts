@@ -55,6 +55,7 @@ dependencies {
     implementation(project(":feature:main"))
     implementation(project(":feature:chat"))
     implementation(project(":feature:room"))
+    implementation(project(":feature:user"))
     implementation("com.google.dagger:hilt-android:2.60.1")
     implementation("androidx.lifecycle:lifecycle-process:2.8.7")
     implementation("androidx.lifecycle:lifecycle-common-java8:2.8.7")

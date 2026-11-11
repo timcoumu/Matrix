@@ -27,6 +27,7 @@ fun NavGraphBuilder.mainScreen(
     onBack:()->Unit,
     onOpenLogin:()-> Unit,
     onOpenRegister:()-> Unit,
+    onOpenProfile:(userId:String)-> Unit,
     onOpenChat:(roomId: String)-> Unit,
     onOpenCreate:(roomType: RoomType)-> Unit,
     onOpenSpace:(space: SpaceState)-> Unit,
@@ -65,7 +66,8 @@ fun NavGraphBuilder.mainScreen(
         MeRoute(
             onBack = onBack,
             onOpenLogin = onOpenLogin,
-            onOpenRegister = onOpenRegister
+            onOpenRegister = onOpenRegister,
+            onOpenProfile = onOpenProfile
         )
     }
 }

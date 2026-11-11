@@ -207,4 +207,13 @@ object Matrix {
         profileHandle?.cancel()
         profileHandle = null
     }
+    suspend fun setUsername(username: String){
+        client.setDisplayName(username)
+    }
+    suspend fun setAvatarUrl(url: String){
+        client.setAvatarUrl(url)
+    }
+    suspend fun uploadAvatar(bytes: ByteArray){
+        client.uploadAvatar("image/*",bytes)
+    }
 }

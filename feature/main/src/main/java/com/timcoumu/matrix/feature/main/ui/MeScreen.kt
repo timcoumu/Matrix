@@ -17,7 +17,7 @@ fun MeScreen(
     meUiState: MeUiState,
     onBack:()->Unit,
     onOpenRegister:()-> Unit,
-    onEditClick:()-> Unit,
+    onOpenProfile:(userId: String)-> Unit,
     onQrClick:()-> Unit,
     onLogout:()->Unit,
     onOpenLogin:()-> Unit
@@ -30,7 +30,7 @@ fun MeScreen(
         ProfileHeader(
             displayName = meUiState.displayName,
             userId = meUiState.userId,
-            onEditClick = onEditClick,
+            onOpenProfile = onOpenProfile,
             onQrClick = onQrClick,
             avatarUrl = meUiState.avatarUrl,
             isLoggedIn = meUiState.isLoggedIn,
@@ -47,7 +47,7 @@ fun PreviewScreen(){
         onBack = {},
         onOpenLogin = {},
         onOpenRegister = {},
-        onEditClick = {},
+        onOpenProfile = {},
         onQrClick = {},
         meUiState = MeUiState(
             displayName = "displayname",

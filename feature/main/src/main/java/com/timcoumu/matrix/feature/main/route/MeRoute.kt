@@ -12,6 +12,7 @@ fun MeRoute(
     onBack:()->Unit,
     onOpenLogin:()-> Unit,
     onOpenRegister:()-> Unit,
+    onOpenProfile:(userId:String)-> Unit
 ){
     val meViewModel = hiltViewModel<MeViewModel>()
     val meUiState by meViewModel.meUiState.collectAsStateWithLifecycle()
@@ -20,7 +21,7 @@ fun MeRoute(
         onBack = onBack,
         onOpenLogin = onOpenLogin,
         onOpenRegister = onOpenRegister,
-        onEditClick = {},
+        onOpenProfile = onOpenProfile,
         onQrClick = {},
         onLogout = meViewModel::logout
     )

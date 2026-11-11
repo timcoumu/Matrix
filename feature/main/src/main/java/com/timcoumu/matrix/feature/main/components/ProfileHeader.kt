@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,12 +22,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 
 @Composable
 internal fun ProfileHeader(
@@ -37,14 +33,14 @@ internal fun ProfileHeader(
     displayName:String,
     userId: String,
     avatarUrl:String?,
-    onEditClick: () -> Unit,
+    onOpenProfile: (userId: String) -> Unit,
     onOpenLogin:()->Unit,
     onQrClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = { if (isLoggedIn) onEditClick() else onOpenLogin() })
+            .clickable(onClick = { if (isLoggedIn) onOpenProfile(userId) else onOpenLogin() })
             .padding(horizontal = 20.dp, vertical = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -55,7 +51,7 @@ internal fun ProfileHeader(
                 .background(MaterialTheme.colorScheme.primaryContainer),
             contentAlignment = Alignment.Center,
         ) {
-            MatrixBitmapLoader(url = avatarUrl?:"", errorSize = 40.dp)
+            MatrixBitmapLoader(url = if(isLoggedIn)avatarUrl?:"" else "", errorSize = 40.dp)
         }
 
         Spacer(Modifier.width(16.dp))
@@ -94,7 +90,7 @@ fun PreviewComponent(){
     ProfileHeader(
         displayName = "",
         userId = "",
-        onEditClick = {},
+        onOpenProfile = {},
         onQrClick = {},
         avatarUrl = "",
         isLoggedIn = true,

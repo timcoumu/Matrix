@@ -25,6 +25,8 @@ import com.timcoumu.matrix.feature.room.navigation.InviteDestination
 import com.timcoumu.matrix.feature.room.navigation.RoomInSpaceDestination
 import com.timcoumu.matrix.feature.room.navigation.RoomManagerDestination
 import com.timcoumu.matrix.feature.room.navigation.createScreen
+import com.timcoumu.matrix.feature.user.navigation.ProfileDestination
+import com.timcoumu.matrix.feature.user.navigation.userScreen
 import com.timcoumu.matrix.ui.MainBottomBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -105,6 +107,9 @@ fun AppNavHost(
                 },
                 onOpenInviteBox = {
                     navController.navigate(InviteBoxDestination)
+                },
+                onOpenProfile = {
+                    navController.navigate(ProfileDestination(it))
                 }
             )
             authScreen(
@@ -162,6 +167,16 @@ fun AppNavHost(
                             roomId = it
                         )
                     )
+                }
+            )
+            userScreen(
+                onBack = {
+                    navController.popBackStack()
+                },
+                showMessage = {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(it)
+                    }
                 }
             )
         }
