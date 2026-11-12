@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,49 +44,53 @@ fun InviteBoxScreen(
     onAccept:(roomId: String)-> Unit,
     onReject:(roomId: String)-> Unit,
 ){
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+    Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
             name = "邀请",
             onBack = onBack
         )
-        if (inviteBoxUiState.inviteList.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "暂无邀请",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(
-                    items = inviteBoxUiState.inviteList,
-                    key = { it.id }
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+
+            if (inviteBoxUiState.inviteList.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
                 ) {
-                    InviteBoxItem(
-                        room = it,
-                        onAccept = onAccept,
-                        onReject = onReject
+                    Text(
+                        text = "暂无邀请",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(
+                        items = inviteBoxUiState.inviteList,
+                        key = { it.id }
+                    ) {
+                        InviteBoxItem(
+                            room = it,
+                            onAccept = onAccept,
+                            onReject = onReject
+                        )
+                    }
                 }
             }
         }
     }
+
 }
 
 @Composable
@@ -122,8 +125,7 @@ private fun InviteBoxItem(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = room.displayName?.takeIf { it.isNotBlank() } ?: "未命名房间",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Medium,
+                        style = MaterialTheme.typography.titleMedium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -144,13 +146,13 @@ private fun InviteBoxItem(
                     onClick = { onReject(room.id) },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("拒绝")
+                    Text("拒绝", style = MaterialTheme.typography.labelLarge)
                 }
                 Button(
                     onClick = { onAccept(room.id) },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("接受")
+                    Text("接受", style = MaterialTheme.typography.labelLarge)
                 }
             }
         }

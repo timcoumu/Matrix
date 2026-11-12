@@ -1,5 +1,8 @@
 package com.timcoumu.matrix.feature.auth.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.timcoumu.matrix.feature.auth.Route.LoginRoute
@@ -17,7 +20,20 @@ fun NavGraphBuilder.authScreen(
     onOpenLogin:()->Unit,
     showMessage:(value: String)-> Unit
 ){
-    composable<LoginDestination>{
+    composable<LoginDestination>(
+        enterTransition = {
+            slideInHorizontally(tween(300)) { it }
+        },
+        exitTransition={
+            slideOutHorizontally(tween(300)) { -it }
+        },
+        popEnterTransition = {
+            slideInHorizontally(tween(300)) { -it }
+        },
+        popExitTransition = {
+            slideOutHorizontally(tween(300)) { it }
+        }
+    ){
         LoginRoute(
             onBack = onBack,
             onLoggedIn = onLoggedIn,
@@ -25,7 +41,20 @@ fun NavGraphBuilder.authScreen(
             showMessage = showMessage,
         )
     }
-    composable<RegisterDestination>{
+    composable<RegisterDestination>(
+        enterTransition = {
+            slideInHorizontally(tween(300)) { it }
+        },
+        exitTransition={
+            slideOutHorizontally(tween(300)) { -it }
+        },
+        popEnterTransition = {
+            slideInHorizontally(tween(300)) { -it }
+        },
+        popExitTransition = {
+            slideOutHorizontally(tween(300)) { it }
+        }
+    ){
         RegisterRoute(
             onBack = onBack,
             onOpenLogin = onOpenLogin,

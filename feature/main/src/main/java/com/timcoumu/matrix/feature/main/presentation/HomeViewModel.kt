@@ -2,6 +2,7 @@ package com.timcoumu.matrix.feature.main.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.timcoumu.core.matrix.Matrix
 import com.timcoumu.core.matrix.MatrixRoomService
 import com.timcoumu.core.matrix.MatrixService
 import com.timcoumu.matrix.feature.main.state.HomeUiState
@@ -43,9 +44,8 @@ class HomeViewModel @Inject constructor(): ViewModel() {
         _isAddDialogVisible.value = false
     }
 
-    fun initRoomService(){
+    fun initHomeScreen(){
         viewModelScope.launch {
-            MatrixRoomService.roomsFlow
         }
     }
 }

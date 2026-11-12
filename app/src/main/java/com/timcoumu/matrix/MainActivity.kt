@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material3.MaterialTheme
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
@@ -14,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.timcoumu.core.data.AppDataStore
 import com.timcoumu.core.matrix.Matrix
 import com.timcoumu.core.matrix.Matrix.checkSession
+import com.timcoumu.matrix.theme.MatrixTheme
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent{
-            MaterialTheme{
+            MatrixTheme{
                 AppNavHost(
                     navController = rememberNavController()
                 )

@@ -1,5 +1,8 @@
 package com.timcoumu.matrix.feature.room.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
@@ -45,7 +48,20 @@ fun NavGraphBuilder.createScreen(
     onOpenHome:()->Unit,
     onOpenInvite:(roomId: String?)-> Unit
 ){
-    composable<CreateDestination>{
+    composable<CreateDestination>(
+        enterTransition = {
+            slideInHorizontally(tween(300)) { it }
+        },
+        exitTransition={
+            slideOutHorizontally(tween(300)) { -it }
+        },
+        popEnterTransition = {
+            slideInHorizontally(tween(300)) { -it }
+        },
+        popExitTransition = {
+            slideOutHorizontally(tween(300)) { it }
+        }
+    ){
         val createDestination = it.toRoute<CreateDestination>()
         CreateRoomRoute(
             onBack = onBack,
@@ -59,7 +75,20 @@ fun NavGraphBuilder.createScreen(
             spaceJoinRule = createDestination.spaceJoinRule
         )
     }
-    composable<RoomInSpaceDestination> {
+    composable<RoomInSpaceDestination>(
+        enterTransition = {
+            slideInHorizontally(tween(300)) { it }
+        },
+        exitTransition={
+            slideOutHorizontally(tween(300)) { -it }
+        },
+        popEnterTransition = {
+            slideInHorizontally(tween(300)) { -it }
+        },
+        popExitTransition = {
+            slideOutHorizontally(tween(300)) { it }
+        }
+    ){
         val roomInSpaceDestination = it.toRoute<RoomInSpaceDestination>()
         RoomInSpaceRoute(
             onBack = onBack,
@@ -68,7 +97,20 @@ fun NavGraphBuilder.createScreen(
             spaceId=roomInSpaceDestination.spaceId
         )
     }
-    composable<RoomManagerDestination> {
+    composable<RoomManagerDestination>(
+        enterTransition = {
+            slideInHorizontally(tween(300)) { it }
+        },
+        exitTransition={
+            slideOutHorizontally(tween(300)) { -it }
+        },
+        popEnterTransition = {
+            slideInHorizontally(tween(300)) { -it }
+        },
+        popExitTransition = {
+            slideOutHorizontally(tween(300)) { it }
+        }
+    ){
         val roomManagerDestination = it.toRoute<RoomManagerDestination>()
         RoomManagerRoute(
             roomId = roomManagerDestination.roomId,
@@ -78,7 +120,20 @@ fun NavGraphBuilder.createScreen(
             onOpenInvite = onOpenInvite
         )
     }
-    composable<InviteDestination> {
+    composable<InviteDestination>(
+        enterTransition = {
+            slideInHorizontally(tween(300)) { it }
+        },
+        exitTransition={
+            slideOutHorizontally(tween(300)) { -it }
+        },
+        popEnterTransition = {
+            slideInHorizontally(tween(300)) { -it }
+        },
+        popExitTransition = {
+            slideOutHorizontally(tween(300)) { it }
+        }
+    ){
         val inviteDestination = it.toRoute<InviteDestination>()
         InviteRoute(
             onBack = onBack,
@@ -86,7 +141,20 @@ fun NavGraphBuilder.createScreen(
             showMessage = showMessage
         )
     }
-    composable<InviteBoxDestination> {
+    composable<InviteBoxDestination>(
+        enterTransition = {
+            slideInHorizontally(tween(300)) { it }
+        },
+        exitTransition={
+            slideOutHorizontally(tween(300)) { -it }
+        },
+        popEnterTransition = {
+            slideInHorizontally(tween(300)) { -it }
+        },
+        popExitTransition = {
+            slideOutHorizontally(tween(300)) { it }
+        }
+    ){
         InviteBoxRoute(
             onBack = onBack,
             showMessage = showMessage

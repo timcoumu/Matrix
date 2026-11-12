@@ -3,6 +3,7 @@ package com.timcoumu.matrix.feature.main.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Inbox
 import androidx.compose.material.icons.outlined.Info
@@ -24,7 +25,7 @@ fun SettingScreen(
 ){
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar("设置")
-        Column(modifier = Modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Column(modifier = Modifier.padding(vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             SettingsCard {
                 SettingItem(
                     icon = Icons.Outlined.Inbox,

@@ -36,9 +36,9 @@ fun CardContainer(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(title)
+                Text(title, style = MaterialTheme.typography.titleMedium)
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text(titleDesc, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(titleDesc, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Icon(
                         Icons.Default.ChevronRight,
                         "",

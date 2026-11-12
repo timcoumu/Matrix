@@ -132,7 +132,7 @@ fun HomeScreen(
                     ){
                         Icon(Icons.Outlined.ChatBubbleOutline,"",
                             Modifier.size(18.dp))
-                        Text("新建聊天")
+                        Text("新建聊天", style = MaterialTheme.typography.bodyLarge)
                     }
                     HorizontalDivider(modifier = Modifier.width(100.dp))
                     Row(
@@ -146,7 +146,7 @@ fun HomeScreen(
                     ){
                         Icon(Icons.Outlined.Workspaces,"",
                             Modifier.size(18.dp))
-                        Text("新建空间")
+                        Text("新建空间", style = MaterialTheme.typography.bodyLarge)
                     }
                 }
             }

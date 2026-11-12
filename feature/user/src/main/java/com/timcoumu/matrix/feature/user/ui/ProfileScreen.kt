@@ -38,39 +38,43 @@ fun ProfileScreen(
     onConfirmUsernameChange:()-> Unit,
     onConfirmUserAvatarChange:()-> Unit
 ){
-    Column(modifier = Modifier
-        .background(MaterialTheme.colorScheme.background)
-        .fillMaxSize()
-        .padding(horizontal = 16.dp)) {
+    Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
             text = "用户设置",
             onBack = onBack
         )
-        SettingCard(
-            title = "用户信息",
-        ){
-            SettingItem(
-                modifier = Modifier.combinedClickable(
-                    onClick = onClickUsername
-                ),
-                text = "用户名"
-            )
-            SettingItem(
-                modifier = Modifier.combinedClickable(
-                    onClick = onClickAvatar
-                ),
-                text = "头像"
-            )
+        Column(modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 10.dp)) {
+            SettingCard(
+                title = "用户信息",
+            ){
+                SettingItem(
+                    modifier = Modifier.combinedClickable(
+                        onClick = onClickUsername
+                    ),
+                    text = "用户名"
+                )
+                SettingItem(
+                    modifier = Modifier.combinedClickable(
+                        onClick = onClickAvatar
+                    ),
+                    text = "头像"
+                )
+            }
         }
+
     }
     if (profileUiState.usernameDialog.show) AlertDialog(
         title = {
-            Text("修改用户名")
+            Text("修改用户名", style = MaterialTheme.typography.headlineSmall)
         },
         text = {
             TextField(
                 value = profileUiState.usernameDialog.username,
-                onValueChange = onUsernameChange
+                onValueChange = onUsernameChange,
+                textStyle = MaterialTheme.typography.bodyLarge
             )
         },
         onDismissRequest = {
@@ -83,7 +87,7 @@ fun ProfileScreen(
                     onCloseDialog()
                 }
             ) {
-                Text("确定")
+                Text("确定", style = MaterialTheme.typography.labelLarge)
             }
         },
         dismissButton = {
@@ -91,15 +95,17 @@ fun ProfileScreen(
                 onClick = {
                     onCloseDialog()
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error
+                )
             ) {
-                Text("取消")
+                Text("取消", style = MaterialTheme.typography.labelLarge)
             }
         }
     )
     if (profileUiState.userAvatarDialog.show) AlertDialog(
         title = {
-            Text("修改头像")
+            Text("修改头像", style = MaterialTheme.typography.headlineSmall)
         },
         text = {},
         onDismissRequest = {
@@ -116,7 +122,7 @@ fun ProfileScreen(
 //                onConfirmUserAvatarChange()
 //                onCloseDialog()
 //            }) {
-//                Text("确定")
+//                Text("确定", style = MaterialTheme.typography.labelLarge)
 //            }
 
         },
@@ -125,9 +131,11 @@ fun ProfileScreen(
                 onClick = {
                     onCloseDialog()
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error
+                )
             ) {
-                Text("取消")
+                Text("取消", style = MaterialTheme.typography.labelLarge)
             }
         }
     )
@@ -147,7 +155,7 @@ fun PreviewProfileScreen(){
                     avatarUrl = "dsdsdsd"
                 ),
                 usernameDialog = UsernameDialogState(
-                    show = true,
+                    show = false,
                     username = ""
                 ),
                 userAvatarDialog = UserAvatarDialogState(

@@ -22,30 +22,27 @@ import com.timcoumu.matrix.feature.room.state.RoomInSpaceUiState
 @Composable
 fun RoomInSpaceScreen(
     roomInSpaceUiState: RoomInSpaceUiState,
-    onBack:()-> Unit,
-    onOpenChat:(String)-> Unit,
-    onLongClick:()-> Unit
+    onBack: () -> Unit,
+    onOpenChat: (String) -> Unit,
+    onLongClick: () -> Unit
 ) {
     val space = roomInSpaceUiState.space
     val rooms = roomInSpaceUiState.roomListState
     Column(modifier = Modifier.fillMaxSize()) {
-        Row(modifier = Modifier.padding(horizontal = 16.dp),) {
-            TopBar(
-                name = space.displayName,
-                onBack = onBack
-            )
-        }
-
+        TopBar(
+            name = space.displayName,
+            onBack = onBack
+        )
         LazyColumn() {
             items(
                 items = rooms,
-                key={it.id}
-            ){
+                key = { it.id }
+            ) {
                 ConversationRow(
                     roomId = it.id,
-                    displayName = it.displayName?:"",
-                    topic = it.topic?:"",
-                    avatarUrl = it.avatarUrl?:"",
+                    displayName = it.displayName ?: "",
+                    topic = it.topic ?: "",
+                    avatarUrl = it.avatarUrl ?: "",
                     onOpenChat = onOpenChat,
                     onLongClick = onLongClick
                 )
@@ -56,8 +53,8 @@ fun RoomInSpaceScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewRoomInSpace(){
-    MaterialTheme{
+fun PreviewRoomInSpace() {
+    MaterialTheme {
         RoomInSpaceScreen(
             roomInSpaceUiState = RoomInSpaceUiState(
                 space = SpaceState(

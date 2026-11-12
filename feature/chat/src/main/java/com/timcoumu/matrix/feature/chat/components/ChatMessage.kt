@@ -25,7 +25,7 @@ fun ChatMessage(
             .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text)
+        Text(text, style = MaterialTheme.typography.bodyLarge)
     }
 }
 

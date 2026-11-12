@@ -20,7 +20,9 @@ fun HomeRoute(
 ){
     val homeViewModel = hiltViewModel<HomeViewModel>()
     val homeUiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
-    LaunchedEffect(Unit) { }
+    LaunchedEffect(Unit) {
+        homeViewModel.initHomeScreen()
+    }
     HomeScreen(
         homeUiState = homeUiState,
         onOpenChat = onOpenChat,

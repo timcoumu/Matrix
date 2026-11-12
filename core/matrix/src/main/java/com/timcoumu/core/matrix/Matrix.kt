@@ -215,5 +215,6 @@ object Matrix {
     }
     suspend fun uploadAvatar(bytes: ByteArray){
         client.uploadAvatar("image/*",bytes)
+        checkSession()
     }
 }

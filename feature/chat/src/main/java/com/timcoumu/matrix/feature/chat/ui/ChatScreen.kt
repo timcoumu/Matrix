@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.timcoumu.core.matrix.model.MessageState
@@ -46,12 +45,7 @@ fun ChatScreen(
             listState.scrollToItem(chatUiState.messages.lastIndex)
         }
     }
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .imePadding()
-            .fillMaxSize()
-    ) {
+    Column(modifier= Modifier.fillMaxSize()) {
         TopBar(
             name = "聊天房间",
             onBack = onBack,
@@ -64,45 +58,53 @@ fun ChatScreen(
                 ))
             }
         )
-        LazyColumn(
-            state = listState,
-            modifier = Modifier.weight(1f)
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .imePadding()
+                .fillMaxSize()
         ) {
-            items(
-                items = chatUiState.messages,
-                key = {
-                    it.id
-                }
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.weight(1f)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp)
+                items(
+                    items = chatUiState.messages,
+                    key = {
+                        it.id
+                    }
                 ) {
-                    ChatListItem(
-                        sender = it.sender,
-                        text = it.body,
-                        isSender = it.sender == chatUiState.userState.userId
-                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp)
+                    ) {
+                        ChatListItem(
+                            sender = it.sender,
+                            text = it.body,
+                            isSender = it.sender == chatUiState.userState.userId
+                        )
 //                    Text(it.sender + ":")
 //                    Text(it.body, fontWeight = FontWeight.SemiBold)
 //                    if (it.isEdited) Text("（已修改）")
 //                    Text("消息类型：" + it.msgType)
+                    }
                 }
             }
+            ChatTextField(
+                modifier = Modifier,
+                onSend = {
+                    onSend()
+                    chatScopeCall {
+                        if (chatUiState.messages.lastIndex != -1)listState.scrollToItem(chatUiState.messages.lastIndex)
+                    }
+                    keyboardController?.hide()
+                },
+                text = chatUiState.sendMessage,
+                onChangeMessage = onChangeSendMessage
+            )
         }
-        ChatTextField(
-            modifier = Modifier,
-            onSend = {
-                onSend()
-                chatScopeCall {
-                    if (chatUiState.messages.lastIndex != -1)listState.scrollToItem(chatUiState.messages.lastIndex)
-                }
-                keyboardController?.hide()
-            },
-            text = chatUiState.sendMessage,
-            onChangeMessage = onChangeSendMessage
-        )
+
     }
 }
 

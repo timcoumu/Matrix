@@ -29,6 +29,7 @@ fun ChatListItem(
         ) {
             Text(
                 text = sender,
+                style = MaterialTheme.typography.labelMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )

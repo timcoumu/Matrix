@@ -38,7 +38,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -68,110 +67,116 @@ fun InviteScreen(
         keyboardController?.hide()
         focusManager.clearFocus()
     }
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+    Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
             name = "邀请用户",
             onBack = onBack
         )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            OutlinedTextField(
-                value = inviteUiState.username,
-                onValueChange = onUsernameChang,
-                label = { Text("用户名") },
-                placeholder = { Text("搜索要邀请的用户") },
-                singleLine = true,
-                shape = RoundedCornerShape(24.dp),
-                leadingIcon = {
-                    Icon(Icons.Default.Search, contentDescription = "")
-                },
-                trailingIcon = {
-                    if (inviteUiState.username.isNotEmpty()) {
-                        IconButton(
-                            onClick = {
-                                onUsernameChang("")
-                            }
-                        ) {
-                            Icon(Icons.Default.Clear, contentDescription = "清除")
-                        }
-                    }
-                },
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(onSearch = { search() }),
-                modifier = Modifier.weight(1f)
-            )
-            Button(
-                onClick = { search() },
-                enabled = inviteUiState.username.isNotBlank()
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("搜索")
-            }
-        }
-        if (inviteUiState.userList.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = if (inviteUiState.username.isBlank()) {
-                        "输入用户名搜索要邀请的用户"
-                    } else {
-                        "没有找到用户"
+                OutlinedTextField(
+                    value = inviteUiState.username,
+                    onValueChange = onUsernameChang,
+                    label = { Text("用户名", style = MaterialTheme.typography.bodySmall) },
+                    placeholder = { Text("搜索要邀请的用户", style = MaterialTheme.typography.bodyLarge) },
+                    singleLine = true,
+                    textStyle = MaterialTheme.typography.bodyLarge,
+                    shape = RoundedCornerShape(24.dp),
+                    leadingIcon = {
+                        Icon(Icons.Default.Search, contentDescription = "")
                     },
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            ) {
-                items(
-                    items = inviteUiState.userList,
-                    key = { it.userId }
-                ) {
-                    InviteUserRow(modifier = Modifier.combinedClickable(
-                        onClick = {
-                            onShowDialog(it)
+                    trailingIcon = {
+                        if (inviteUiState.username.isNotEmpty()) {
+                            IconButton(
+                                onClick = {
+                                    onUsernameChang("")
+                                }
+                            ) {
+                                Icon(Icons.Default.Clear, contentDescription = "清除")
+                            }
                         }
-                    ),user = it)
+                    },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    keyboardActions = KeyboardActions(onSearch = { search() }),
+                    modifier = Modifier.weight(1f)
+                )
+                Button(
+                    onClick = { search() },
+                    enabled = inviteUiState.username.isNotBlank()
+                ) {
+                    Text("搜索", style = MaterialTheme.typography.labelLarge)
+                }
+            }
+            if (inviteUiState.userList.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = if (inviteUiState.username.isBlank()) {
+                            "输入用户名搜索要邀请的用户"
+                        } else {
+                            "没有找到用户"
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) {
+                    items(
+                        items = inviteUiState.userList,
+                        key = { it.userId }
+                    ) {
+                        InviteUserRow(modifier = Modifier.combinedClickable(
+                            onClick = {
+                                onShowDialog(it)
+                            }
+                        ),user = it)
+                    }
                 }
             }
         }
     }
     if (inviteUiState.confirmDialogState.showDialog) AlertDialog(
-        title = {Text("提示")},
+        title = {Text("提示", style = MaterialTheme.typography.headlineSmall)},
         onDismissRequest = {onDismissDialog()},
         text = {
-            Text("确定邀请${inviteUiState.confirmDialogState.user?.displayName}？")
+            Text("确定邀请${inviteUiState.confirmDialogState.user?.displayName}？", style = MaterialTheme.typography.bodyMedium)
         },
         dismissButton = {
             Button(onClick = {
                 onConfirmDialog()
                 onDismissDialog()
             }) {
-                Text("确定")
+                Text("确定", style = MaterialTheme.typography.labelLarge)
             }
         },
         confirmButton = {
             Button(onClick = {
                 onDismissDialog()
             },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error
+                )
             ) {
-                Text("取消")
+                Text("取消", style = MaterialTheme.typography.labelLarge)
             }
         }
     )

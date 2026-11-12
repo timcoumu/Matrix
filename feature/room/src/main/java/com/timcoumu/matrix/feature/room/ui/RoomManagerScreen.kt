@@ -35,11 +35,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.timcoumu.core.matrix.model.MyRoomMemberState
 import com.timcoumu.core.matrix.model.RoomState
@@ -65,16 +63,18 @@ fun RoomManagerScreen(
     var editNameValue by remember { mutableStateOf("") }
     var editTopicDialog by remember { mutableStateOf(false) }
     var editTopicValue by remember { mutableStateOf("") }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+    Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
             "房间管理",
             onBack = onBack,
         )
+        Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -97,13 +97,13 @@ fun RoomManagerScreen(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = roomManagerUiState.room?.displayName ?: "无标题",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.titleLarge,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
                 Text(
                     text = roomManagerUiState.room?.topic ?: "无主题",
+                    style = MaterialTheme.typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
@@ -141,6 +141,7 @@ fun RoomManagerScreen(
                         }
                         Text(
                             text = it.displayName,
+                            style = MaterialTheme.typography.bodySmall,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1
                         )
@@ -178,8 +179,7 @@ fun RoomManagerScreen(
             ) {
                 Text(
                     text = "邀请用户",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium,
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.error,
                 )
             }
@@ -188,8 +188,9 @@ fun RoomManagerScreen(
             leaveRoomDialog = true
         })
     }
+    }
     if (leaveRoomDialog) AlertDialog(
-        title = { Text("提示") },
+        title = { Text("提示", style = MaterialTheme.typography.headlineSmall) },
         onDismissRequest = {
             leaveRoomDialog = false
         },
@@ -199,9 +200,11 @@ fun RoomManagerScreen(
                     leaveRoomDialog = false
                     onLeaveRoom()
                 },
-                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error
+                )
             ) {
-                Text("确定")
+                Text("确定", style = MaterialTheme.typography.labelLarge)
             }
 
         },
@@ -211,15 +214,15 @@ fun RoomManagerScreen(
                     leaveRoomDialog = false
                 }
             ) {
-                Text("取消")
+                Text("取消", style = MaterialTheme.typography.labelLarge)
             }
         },
         text = {
-            Text("真的要离开房间吗？")
+            Text("真的要离开房间吗？", style = MaterialTheme.typography.bodyMedium)
         }
     )
     if (editNameDialog) AlertDialog(
-        title = { Text("房间名") },
+        title = { Text("房间名", style = MaterialTheme.typography.headlineSmall) },
         onDismissRequest = {
             editNameDialog = false
         },
@@ -229,9 +232,11 @@ fun RoomManagerScreen(
                     onClickRoomName(roomManagerUiState.room?.displayName ?: "")
                     editNameDialog = false
                 },
-                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error
+                )
             ) {
-                Text("确定")
+                Text("确定", style = MaterialTheme.typography.labelLarge)
             }
 
         },
@@ -241,18 +246,19 @@ fun RoomManagerScreen(
                     editNameDialog = false
                 }
             ) {
-                Text("取消")
+                Text("取消", style = MaterialTheme.typography.labelLarge)
             }
         },
         text = {
             TextField(
                 value = editNameValue,
-                onValueChange = {editNameValue = it}
+                onValueChange = {editNameValue = it},
+                textStyle = MaterialTheme.typography.bodyLarge
             )
         }
     )
     if (editTopicDialog) AlertDialog(
-        title = { Text("主题") },
+        title = { Text("主题", style = MaterialTheme.typography.headlineSmall) },
         onDismissRequest = {
             editTopicDialog = false
         },
@@ -262,9 +268,11 @@ fun RoomManagerScreen(
                     onClickRoomTopic(roomManagerUiState.room?.topic ?: "")
                     editTopicDialog = false
                 },
-                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error
+                )
             ) {
-                Text("确定")
+                Text("确定", style = MaterialTheme.typography.labelLarge)
             }
 
         },
@@ -274,13 +282,14 @@ fun RoomManagerScreen(
                     editTopicDialog = false
                 }
             ) {
-                Text("取消")
+                Text("取消", style = MaterialTheme.typography.labelLarge)
             }
         },
         text = {
             TextField(
                 value = editTopicValue,
-                onValueChange = {editTopicValue = it}
+                onValueChange = {editTopicValue = it},
+                textStyle = MaterialTheme.typography.bodyLarge
             )
         }
     )

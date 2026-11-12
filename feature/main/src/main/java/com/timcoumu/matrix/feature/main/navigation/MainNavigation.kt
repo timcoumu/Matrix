@@ -1,5 +1,8 @@
 package com.timcoumu.matrix.feature.main.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.timcoumu.core.matrix.model.RoomType
@@ -33,7 +36,20 @@ fun NavGraphBuilder.mainScreen(
     onOpenSpace:(space: SpaceState)-> Unit,
     onOpenEditor:(spaceId: String, spaceName: String, spaceAvatar: String, spaceTopic: String, spaceJoinRule: String, type: RoomType)-> Unit
 ){
-    composable<HomeDestination> {
+    composable<HomeDestination>(
+//        enterTransition = {
+//            slideInHorizontally(tween(300)) { it }
+//        },
+//        exitTransition={
+//            slideOutHorizontally(tween(300)) { -it }
+//        },
+        popEnterTransition = {
+            slideInHorizontally(tween(300)) { -it }
+        },
+//        popExitTransition = {
+//            slideOutHorizontally(tween(300)) { it }
+//        }
+    ){
         HomeRoute(
             onBack = onBack,
             onOpenChat = onOpenChat,
@@ -43,7 +59,20 @@ fun NavGraphBuilder.mainScreen(
 //            onOpenMe = onOpenMe
         )
     }
-    composable<SpaceDestination> {
+    composable<SpaceDestination>(
+//        enterTransition = {
+//            slideInHorizontally(tween(300)) { it }
+//        },
+//        exitTransition={
+//            slideOutHorizontally(tween(300)) { -it }
+//        },
+        popEnterTransition = {
+            slideInHorizontally(tween(300)) { -it }
+        },
+//        popExitTransition = {
+//            slideOutHorizontally(tween(300)) { it }
+//        }
+    ) {
         SpaceRoute(
             onBack = onBack,
             onOpenSpace = onOpenSpace,
@@ -53,7 +82,20 @@ fun NavGraphBuilder.mainScreen(
 //            onOpenMe = onOpenMe
         )
     }
-    composable<SettingDestination> {
+    composable<SettingDestination>(
+//        enterTransition = {
+//            slideInHorizontally(tween(300)) { it }
+//        },
+//        exitTransition={
+//            slideOutHorizontally(tween(300)) { -it }
+//        },
+        popEnterTransition = {
+            slideInHorizontally(tween(300)) { -it }
+        },
+//        popExitTransition = {
+//            slideOutHorizontally(tween(300)) { it }
+//        }
+    ) {
         SettingRoute(
             onBack = onBack,
             onOpenInviteBox = onOpenInviteBox,
@@ -62,7 +104,20 @@ fun NavGraphBuilder.mainScreen(
 //            onOpenMe = onOpenMe
         )
     }
-    composable<MeDestination> {
+    composable<MeDestination>(
+//        enterTransition = {
+//            slideInHorizontally(tween(300)) { it }
+//        },
+//        exitTransition={
+//            slideOutHorizontally(tween(300)) { -it }
+//        },
+        popEnterTransition = {
+            slideInHorizontally(tween(300)) { -it }
+        },
+//        popExitTransition = {
+//            slideOutHorizontally(tween(300)) { it }
+//        }
+    ) {
         MeRoute(
             onBack = onBack,
             onOpenLogin = onOpenLogin,

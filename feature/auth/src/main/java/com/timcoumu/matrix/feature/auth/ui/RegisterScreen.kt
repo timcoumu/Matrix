@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -55,8 +56,9 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = registerUiState.username,
                 onValueChange = onUsernameChange,
-                label = { Text("用户名") },
+                label = { Text("用户名", style = MaterialTheme.typography.bodySmall) },
                 singleLine = true,
+                textStyle = MaterialTheme.typography.bodyLarge,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Done
@@ -67,8 +69,9 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = registerUiState.password,
                 onValueChange = onPasswordChange,
-                label = { Text("密码") },
+                label = { Text("密码", style = MaterialTheme.typography.bodySmall) },
                 singleLine = true,
+                textStyle = MaterialTheme.typography.bodyLarge,
                 visualTransformation = if (passwordVisible) {
                     VisualTransformation.None
                 } else {
@@ -80,7 +83,7 @@ fun RegisterScreen(
                 ),
                 trailingIcon = {
                     TextButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Text(if (passwordVisible) "Hide" else "Show")
+                        Text(if (passwordVisible) "Hide" else "Show", style = MaterialTheme.typography.labelLarge)
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -89,8 +92,9 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = registerUiState.confirmPassword,
                 onValueChange = onConfirmPasswordChange,
-                label = { Text("再次输入密码") },
+                label = { Text("再次输入密码", style = MaterialTheme.typography.bodySmall) },
                 singleLine = true,
+                textStyle = MaterialTheme.typography.bodyLarge,
                 visualTransformation = if (confirmPasswordVisible) {
                     VisualTransformation.None
                 } else {
@@ -102,7 +106,7 @@ fun RegisterScreen(
                 ),
                 trailingIcon = {
                     TextButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
-                        Text(if (confirmPasswordVisible) "Hide" else "Show")
+                        Text(if (confirmPasswordVisible) "Hide" else "Show", style = MaterialTheme.typography.labelLarge)
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -111,8 +115,9 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = registerUiState.registerToken?:"",
                 onValueChange = onRegisterTokenChange,
-                label = { Text("用户名") },
+                label = { Text("用户名", style = MaterialTheme.typography.bodySmall) },
                 singleLine = true,
+                textStyle = MaterialTheme.typography.bodyLarge,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Done
@@ -124,14 +129,14 @@ fun RegisterScreen(
                 onClick = onRegister,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("注册")
+                Text("注册", style = MaterialTheme.typography.labelLarge)
             }
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = onOpenLogin,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("已有账号，去登陆")
+                Text("已有账号，去登陆", style = MaterialTheme.typography.labelLarge)
             }
         }
     }

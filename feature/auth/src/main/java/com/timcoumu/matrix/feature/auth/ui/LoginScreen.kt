@@ -62,8 +62,9 @@ fun LoginScreen(
             OutlinedTextField(
                 value = uiState.username,
                 onValueChange = onUsernameChange,
-                label = { Text("Username") },
+                label = { Text("Username", style = MaterialTheme.typography.bodySmall) },
                 singleLine = true,
+                textStyle = MaterialTheme.typography.bodyLarge,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next
@@ -76,8 +77,9 @@ fun LoginScreen(
             OutlinedTextField(
                 value = uiState.password,
                 onValueChange = onPasswordChange,
-                label = { Text("Password") },
+                label = { Text("Password", style = MaterialTheme.typography.bodySmall) },
                 singleLine = true,
+                textStyle = MaterialTheme.typography.bodyLarge,
                 visualTransformation = if (passwordVisible) {
                     VisualTransformation.None
                 } else {
@@ -89,7 +91,7 @@ fun LoginScreen(
                 ),
                 trailingIcon = {
                     TextButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Text(if (passwordVisible) "Hide" else "Show")
+                        Text(if (passwordVisible) "Hide" else "Show", style = MaterialTheme.typography.labelLarge)
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -99,14 +101,14 @@ fun LoginScreen(
                 onClick = onLogin,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("登录")
+                Text("登录", style = MaterialTheme.typography.labelLarge)
             }
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = onOpenRegister,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("去注册")
+                Text("去注册", style = MaterialTheme.typography.labelLarge)
             }
         }
     }

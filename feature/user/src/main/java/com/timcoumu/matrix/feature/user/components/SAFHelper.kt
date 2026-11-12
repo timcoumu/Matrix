@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -37,7 +38,7 @@ fun SAFButton(callback:(bytes: ByteArray?)-> Unit){
             launcher.launch(arrayOf("image/*"))
         }
     ) {
-        Text("上传")
+        Text("上传", style = MaterialTheme.typography.labelLarge)
     }
 }
 

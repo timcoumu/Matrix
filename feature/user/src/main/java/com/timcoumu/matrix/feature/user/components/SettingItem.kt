@@ -25,7 +25,7 @@ fun SettingItem(modifier: Modifier = Modifier,text: String){
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp).background(MaterialTheme.colorScheme.surfaceContainerLowest),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text)
+            Text(text, style = MaterialTheme.typography.bodyLarge)
             Icon(Icons.Default.ChevronRight,"")
         }
     }
